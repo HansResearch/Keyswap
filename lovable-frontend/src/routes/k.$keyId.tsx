@@ -278,7 +278,7 @@ function KeyPage() {
                           <td className="px-3 py-2.5 text-right text-sm tabular-nums sm:px-4">{t.shares}</td>
                           <td className="px-3 py-2.5 text-right text-mono-xs text-muted-foreground tabular-nums sm:px-4">{timeAgo(t.ts)}</td>
                           <td className="hidden px-4 py-2.5 text-right sm:table-cell">
-                            <a href={`https://solscan.io/tx/${t.txnHash}?cluster=devnet`} target="_blank" rel="noreferrer" className="text-mono-xs text-primary hover:underline">
+                            <a href={`https://solscan.io/tx/${t.txnHash}`} target="_blank" rel="noreferrer" className="text-mono-xs text-primary hover:underline">
                               {t.txnHash.slice(0, 6)}↗
                             </a>
                           </td>
