@@ -1,0 +1,10 @@
+# Inherits from root .gitignore — these are defense in depth.
+.env
+.env.local
+*.env
+*.db
+*.db-journal
+node_modules/
+dist/
+public/pfp/*
+!public/pfp/.gitkeep

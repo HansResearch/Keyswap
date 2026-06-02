@@ -1,0 +1,15 @@
+{
+  "name": "keytech",
+  "private": true,
+  "scripts": {
+    "dev": "npx concurrently -n API,UI -c cyan,magenta \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:api": "npm run dev --prefix backend",
+    "dev:ui": "npm run dev --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4"
+  }
+}

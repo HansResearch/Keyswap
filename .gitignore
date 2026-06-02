@@ -1,0 +1,68 @@
+# ─── SECRETS — never commit ────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+
+# Solana keypairs (if any end up inside the repo by accident)
+*-keypair.json
+*-keypair-*.json
+*-secret.json
+keypairs/
+.solana/
+
+# Local SQLite databases
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ─── Build / dependency outputs ────────────────────────────────────────────
+node_modules/
+dist/
+dist-ssr/
+build/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+target/
+*.so
+
+# ─── Tooling caches ────────────────────────────────────────────────────────
+.wrangler/
+.dev.vars
+.vercel/
+.netlify/
+.railway/
+.cache/
+
+# ─── Editor / OS ───────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# ─── Logs ──────────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ─── Backend specifics ─────────────────────────────────────────────────────
+backend/public/pfp/*
+!backend/public/pfp/.gitkeep
+backend/web/
+*.db-shm
+*.db-wal
+
+# ─── Lovable / internal tooling ───────────────────────────────────────────
+.lovable/
+.claude/
+
+# ─── Backup vite configs ──────────────────────────────────────────────────
+*.bak.ts
+*.bak.js

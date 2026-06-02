@@ -1,0 +1,16 @@
+# Railway service config for the Keyswap backend.
+# Volume + env vars are managed in the Railway dashboard (or via `railway variables`).
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Don't restart on failure forever — back off
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+# Healthcheck so Railway knows when a deploy is actually live
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+# Single instance — the indexer assumes it's the only one polling
+numReplicas = 1

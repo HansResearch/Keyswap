@@ -1,0 +1,147 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Soft, layered elevation — overrides Tailwind's shadow scale so every
+     shadcn overlay (dropdown, popover, dialog, tooltip) gets the same polished depth. */
+  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.35);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-md: 0 2px 4px oklch(0 0 0 / 0.35), 0 4px 12px oklch(0 0 0 / 0.3);
+  --shadow-lg: 0 8px 24px oklch(0 0 0 / 0.45), 0 2px 6px oklch(0 0 0 / 0.3);
+  --shadow-xl: 0 16px 40px oklch(0 0 0 / 0.5), 0 4px 10px oklch(0 0 0 / 0.35);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+}
+
+:root {
+  /* Monochromatic black & white — all chroma stripped to 0 (pure neutrals). */
+  --background: oklch(0.14 0 0);
+  --foreground: oklch(0.95 0 0);
+  --surface: oklch(0.17 0 0);
+  --surface-elevated: oklch(0.21 0 0);
+  --card: oklch(0.17 0 0);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.19 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.96 0 0);
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.62 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  /* The only color in the system: green for gains/buy, red for loss/sell. */
+  --destructive: oklch(0.64 0.21 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.74 0.16 150);
+  --success-foreground: oklch(0.15 0 0);
+  --border: oklch(0.27 0 0);
+  --input: oklch(0.24 0 0);
+  --ring: oklch(0.72 0 0);
+  --radius: 0.625rem;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    font-size: 15px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "ss01" 1;
+    letter-spacing: 0.01em;
+  }
+  ::selection { background: oklch(0.95 0 0 / 0.25); color: oklch(0.14 0 0); }
+
+  /* Smooth, fast transitions on everything interactive — the difference between
+     "static page" and "product". Kept short (140ms) so the UI feels snappy, not laggy. */
+  a, button, input, textarea, select, [role="button"], [data-slot] {
+    transition:
+      color 140ms cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 140ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 140ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 140ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 140ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 140ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Crisp, consistent keyboard focus ring across the whole app. */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Slimmer, less obtrusive scrollbars — a small touch that reads as "designed". */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 8px;
+    border: 2px solid var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(0.4 0 0); }
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@layer utilities {
+  .text-mono-xs { font-size: 12.5px; letter-spacing: 0.07em; text-transform: uppercase; }
+  .animate-ticker { animation: ticker-scroll 40s linear infinite; }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, oklch(0.28 0 0 / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.28 0 0 / 0.4) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}

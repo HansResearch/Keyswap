@@ -1,0 +1,31 @@
+[package]
+name = "friendtech-shares"
+version = "0.1.0"
+description = "Solana social key trading — SPL token keys with sqrt bonding curve"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "friendtech_shares"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "0.29.0", features = ["init-if-needed"] }
+anchor-spl  = { version = "0.29.0", features = ["token", "associated_token", "metadata"] }
+solana-program = "=1.18.26"
+
+[dev-dependencies]
+solana-program-test         = "=1.18.26"
+solana-sdk                  = "=1.18.26"
+spl-token                   = "4.0"
+spl-associated-token-account = { version = "2.3", features = ["no-entrypoint"] }
+tokio                       = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

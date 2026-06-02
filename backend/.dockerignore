@@ -1,0 +1,15 @@
+# Never copy these into the build context
+node_modules
+dist
+.env
+.env.*
+*.db
+*.db-journal
+public/pfp/*
+!public/pfp/.gitkeep
+
+# Editor / OS junk
+.DS_Store
+*.log
+.vscode
+.idea
