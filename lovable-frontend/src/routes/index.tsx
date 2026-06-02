@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useKeysStore, volume24h, formatSol, marketcapAt, priceAt, loadKeys, truncate } from "@/lib/keys-store";
 import { fmtUsd } from "@/lib/pricing";
 import { useSolPrice } from "@/lib/use-sol-price";
-import { fetchRecentTrades, type ApiTrade } from "@/lib/api";
+import { fetchRecentTrades, fetchTicker, type ApiTrade, type ApiTickerItem } from "@/lib/api";
 import { KeyAvatar } from "@/components/KeyAvatar";
 
 export const Route = createFileRoute("/")({
@@ -26,7 +26,8 @@ function Home() {
   const [tab, setTab] = useState<"trending" | "new">("trending");
   const navigate = useNavigate();
   const solPrice = useSolPrice();
-  const [recentTrades, setRecentTrades] = useState<ApiTrade[] | null>(null); // null = not loaded yet
+  const [recentTrades, setRecentTrades] = useState<ApiTrade[] | null>(null);
+  const [ticker, setTicker] = useState<Record<string, ApiTickerItem>>({});
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => { loadKeys(); }, []);
@@ -36,6 +37,17 @@ function Home() {
     load();
     intervalRef.current = window.setInterval(load, 4_000);
     return () => { if (intervalRef.current) window.clearInterval(intervalRef.current); };
+  }, []);
+
+  useEffect(() => {
+    const load = () => fetchTicker().then(items => {
+      const map: Record<string, ApiTickerItem> = {};
+      items.forEach(t => { map[t.name] = t; });
+      setTicker(map);
+    });
+    load();
+    const id = window.setInterval(load, 30_000);
+    return () => window.clearInterval(id);
   }, []);
 
   const sorted = [...keys].sort((a, b) =>
@@ -79,7 +91,8 @@ function Home() {
                     <th className="px-3 py-3 text-left font-normal sm:px-4">Key</th>
                     <th className="px-3 py-3 text-right font-normal sm:px-4">Price</th>
                     <th className="px-3 py-3 text-right font-normal sm:px-4">MC</th>
-                    <th className="hidden px-4 py-3 text-right font-normal md:table-cell">24H Vol</th>
+                    <th className="px-3 py-3 text-right font-normal sm:px-4">24H</th>
+                    <th className="hidden px-4 py-3 text-right font-normal md:table-cell">Vol</th>
                     <th className="hidden px-4 py-3 text-right font-normal md:table-cell">Supply</th>
                   </tr>
                 </thead>
@@ -99,6 +112,7 @@ function Home() {
                         </td>
                         <td className="px-3 py-3 text-right sm:px-4"><Skeleton w="w-16 ml-auto" /></td>
                         <td className="px-3 py-3 text-right sm:px-4"><Skeleton w="w-20 ml-auto" /></td>
+                        <td className="px-3 py-3 text-right sm:px-4"><Skeleton w="w-12 ml-auto" /></td>
                         <td className="hidden px-4 py-3 text-right md:table-cell"><Skeleton w="w-14 ml-auto" /></td>
                         <td className="hidden px-4 py-3 text-right md:table-cell"><Skeleton w="w-8 ml-auto" /></td>
                       </tr>
@@ -109,6 +123,10 @@ function Home() {
                     const mc = marketcapAt(k.supply);
                     const vol = volume24h(k);
                     const keyPrice = priceAt(k.supply);
+                    const tickerItem = ticker[k.id];
+                    const pNow = priceAt(k.supply);
+                    const pOld = tickerItem ? priceAt(Math.max(0, tickerItem.supply_24h_ago)) : null;
+                    const pct24h = pOld !== null && pOld > 0 ? ((pNow - pOld) / pOld) * 100 : null;
                     return (
                       <tr
                         key={k.id}
@@ -130,6 +148,15 @@ function Home() {
                         </td>
                         <td className="px-3 py-3 text-right text-sm tabular-nums sm:px-4">
                           {solPrice > 0 ? fmtUsd(mc, solPrice) : `${formatSol(mc)} SOL`}
+                        </td>
+                        <td className="px-3 py-3 text-right text-sm font-semibold tabular-nums sm:px-4">
+                          {pct24h === null ? (
+                            <span className="text-muted-foreground/40">—</span>
+                          ) : (
+                            <span className={pct24h >= 0 ? "text-success" : "text-destructive"}>
+                              {pct24h >= 0 ? "+" : ""}{pct24h.toFixed(1)}%
+                            </span>
+                          )}
                         </td>
                         <td className="hidden px-4 py-3 text-right text-sm tabular-nums text-muted-foreground md:table-cell">
                           {vol > 0 ? (solPrice > 0 ? fmtUsd(vol, solPrice) : `${formatSol(vol)} SOL`) : '—'}
