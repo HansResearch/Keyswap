@@ -55,7 +55,6 @@ pnpm-debug.log*
 # ─── Backend specifics ─────────────────────────────────────────────────────
 backend/public/pfp/*
 !backend/public/pfp/.gitkeep
-backend/web/
 *.db-shm
 *.db-wal
 
@@ -66,3 +65,6 @@ backend/web/
 # ─── Backup vite configs ──────────────────────────────────────────────────
 *.bak.ts
 *.bak.js
+
+# Frontend SPA bundle — built locally, copied before each deploy
+backend/web/
